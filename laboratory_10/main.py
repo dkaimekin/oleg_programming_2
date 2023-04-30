@@ -1,5 +1,6 @@
 # Psycopg to work with the Postgres database
-import psycopg2
+# Pylance ignore because of import problems
+import psycopg2  # type: ignore
 # CSV to update and insert values from a CSV table
 import csv
 

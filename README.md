@@ -1,4 +1,4 @@
-# Repository to store Aluana Malik PP2
+# Repository to store Oleg's PP2
 
 ## This repo is dedicated for the latest 2 labs
 

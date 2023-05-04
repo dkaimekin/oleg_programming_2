@@ -7,6 +7,14 @@ import csv
 
 class PostgresWorker():
 
+    greet_message = "\
+    1 - SELECT query (select * from <table_name>) |\n\
+    2 - Insert from file (path of CSV) |\n\
+    3 - Insert data manually |\n\
+    4 - Query data (with parameters) |\n\
+    5 - Delete data (with parameters) |\n\
+    6 - Exit"
+
     def __init__(self, host, database, user, password):
         self.db_connection = psycopg2.connect(
             host=host,
@@ -115,10 +123,37 @@ if __name__ == "__main__":
         host='localhost', database="aluanapp2db", user='admin', password='admin')
     worker.cursor_init()
     # Example usage
-    table_name = "first_phonebook"
-    worker.insert_manually(table_name)
+    while True:
+        print("Please select the option:")
+        print(worker.greet_message)
+        _input = int(input())
+        if _input == 1:
+            print(worker.select_from_table(table_name="first_phonebook"))
+        elif _input == 2:
+            print(
+                "Please provide the path of the file (or 'back' to return to main page): ")
+            filepath = input()
+            try:
+                if filepath == "back":
+                    continue
+                else:
+                    worker.insert_from_csv(
+                        file_path=filepath, table_name="first_phonebook")
+            except FileNotFoundError:
+                print("The file could not be found, going back to main page...")
+                continue
+        elif _input == 3:
+            print("Ready to provide info manually? y - yes / n - no")
+            is_ready = input()
+            ready = True if is_ready == 'y' or is_ready == 'Y' else False
+            if ready:
+                worker.insert_manually('first_phonebook')
+                continue
+        elif _input == 6:
+            break
 
-    worker.query_data('first_phonebook', 'last_name', ' Markarth')
+    print("Goodbye!")
+
     # Close communication with the database
     worker.cursor.close()
     worker.db_connection.close()
